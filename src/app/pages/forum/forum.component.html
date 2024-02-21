@@ -38,6 +38,7 @@
 <div class="container">
   
   <div *ngFor="let item of listofQuestion;let idx = index"  class="post">
+    <h1>Question:</h1>
     <p>{{item.contenue}}</p>
 
     <div *ngFor="let h of item.hashtag">
