@@ -4,7 +4,7 @@ import { Vote } from "./vote";
 
 export class User{
     id!:String;
-    firstName!:String;
+    nom!:String;
     votes!:Vote[];
     questions!:Question[];
     reponses! :Reponse[];

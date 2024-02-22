@@ -1,5 +1,5 @@
 import { Question } from "./question";
-import { User } from "./users";
+import { User } from "./user";
 
 export class Vote {
     id!:String;

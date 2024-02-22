@@ -45,29 +45,55 @@
       <a style="color: blue;font-weight: bold;" href="#">#{{h.technologie}}</a>
     </div>
 
-      <p class="author">Posted by:{{ item?.user?.firstName}}</p>
+      <p class="author">Posted by:{{ item?.user?.nom}}</p>
 
     <span class="material-symbols-outlined clickable" (click)="addlike(item)">
       shift_lock
       </span>
       <a>{{nbrlike[idx]}}</a>
-
-    <div class="comments" *ngFor="let cmt of item.reponses">
+    <!-- <div class="comments" *ngFor="let cmt of item.reponses ;">
       <div class="comment">
         <div class="container">
-          <p *ngIf="showParagraph">{{cmt.contenue}}</p>
-          <p class="author">Comment by: {{cmt?.user?.firstName}}</p>
-          <form [formGroup]="formGroup">
-            <textarea *ngIf="!showParagraph" rows="5" cols="50" formControlName="contenue">{{cmt.contenue}}</textarea>
-          </form>
+          <p >{{cmt.contenue}}</p>
+          <p class="author">Comment by: {{cmt?.user?.nom}}</p>
+          <div *ngFor="let formGroup of formGroups; let i = index">
+            <div  *ngIf="!showParagraph">
+              <form [formGroup]="formGroup">
+                <textarea rows="5" cols="50" formControlName="contenue">{{ formGroup?.get('contenue')?.value }}</textarea>
+                <div class="col-6 text-right">
+                  <button *ngIf="currentUser == cmt.user.id" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent()">retour</button>
+                  <button *ngIf="currentUser == cmt.user.id" type="button" class="btn btn-primary btn-sm" (click)="modifierre(cmt); toggleContent()">save</button>
+                </div>
+              </form>
+            </div>
+          </div>         
         </div>
-        <button  class="btn btn-primary btn-sm" (click)="toggleContent()">modifier</button>
-        <button *ngIf="currentUser==cmt.user.id"type="button" style="margin: 15px;" class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
-        <button *ngIf="currentUser==cmt.user.id" type="button" class="btn btn-primary btn-sm"(click)="modifierre(cmt)" >save</button>
+        <button *ngIf="currentUser==cmt.user.id&&showParagraph" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent()">modifier</button>       
+        <button *ngIf="currentUser==cmt.user.id"type="button"  class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
       </div>
+    </div> -->
       <!-- Additional comments can be added here -->
-    </div>
-
+      <div class="comment" *ngFor="let cmt of item?.reponses; let i = index">
+        <div class="container">
+          <p>{{ cmt.contenue }}</p>
+          <p class="author">Comment by: {{ cmt.user?.nom }}</p>
+          <div  *ngIf="showParagraph[i]">
+            <form [formGroup]="formGroups[i]"   >
+              <textarea rows="5" cols="50"  formControlName="contenue"></textarea>
+              <div class="col-6 text-right">
+                <button *ngIf="currentUser == cmt.user.id" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">retour</button>
+                <button *ngIf="currentUser == cmt.user.id " type="button" class="btn btn-primary btn-sm" (click)="modifierre(cmt,i); toggleContent(i)">save</button>
+                
+              </div>
+            </form>
+           
+          </div>
+        </div>
+        <button *ngIf="currentUser==cmt.user.id&&!showParagraph[i]" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">modifier</button>       
+        <button *ngIf="currentUser==cmt.user.id"type="button"  class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
+      </div>
+      
+<!--  -->
       <form [formGroup]="repform">
         <div class="form-group"  >
           <label for="comment">Comment:</label>
