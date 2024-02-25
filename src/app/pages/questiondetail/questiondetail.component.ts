@@ -165,14 +165,7 @@ upload(): void {
 supprimerfile(idr:String,file:FileDB){
   this.ps.deletefile(file.id).subscribe(
     data=>{
-      this.ps.getFilesbyreponse(idr).subscribe(
-        res=>{
-          this.files=[];
-          for( let f  of res){
-            this.files.push(f);
-          }
-        }
-      )
+        this.getQuestion(this.ar.snapshot.params['id']);
     }
   )
 }
@@ -207,12 +200,8 @@ ajouterreponse(post: String) {
           console.log(this.filesid)
           this.ps.affecterfileaureponse(data.id,this.filesid,data).subscribe(
             res=>{
-              this.ps.getFilesbyreponse(data.id).subscribe(
-                resd=>{
-                  this.files=[];
-                  console.log(this.files);
-                }
-              )
+              this.filesid=[];
+              this.getQuestion(this.ar.snapshot.params['id']);
             }
           )
         }
@@ -233,6 +222,7 @@ delete(cmt: Reponse) {
   this.ps.deletereponse(cmt.id).subscribe(
     res => {
       this.getQuestion(this.ar.snapshot.params['id']);
+
     }
   )
 }

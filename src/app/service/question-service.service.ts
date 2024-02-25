@@ -25,6 +25,7 @@ export class QuestionServiceService {
   getrepbyquestionsurl="/api/reponse/getallcmtbypost";
   deleteReponseUrl="/api/reponse/delete-Reponse";
   modifierReponseUrl="/api/reponse/update-Reponse";
+  getreponsebyid="/api/reponse/get-Reponse"
   constructor(private http : HttpClient) { }
   ajoutQuestion(q :Question,idu:String): Observable<Question>{
     return this.http.post<Question>(`${this.addquestionUrl}/${idu}`,q);
