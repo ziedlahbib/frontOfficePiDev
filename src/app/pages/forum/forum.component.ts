@@ -222,4 +222,5 @@ modifier(item:Question){
     console.log(this.showParagraph)
     this.showmodifquest = !this.showmodifquest;
 }
+
 }

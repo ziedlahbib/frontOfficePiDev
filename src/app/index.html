@@ -84,7 +84,7 @@
                     </div>
                     <!-- Search Container at the right end of navbar -->
                     <div class="search-container ml-auto">
-                        <input type="text" class="search-input" placeholder="Search...">
+                        <input type="text" class="search-input" placeholder="Search..." (keyup)="applyFilter($event)">
                         <button class="search-button">
                             <i class="fa fa-search"></i>
                         </button>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Question } from '../model/question';
 import { Observable } from 'rxjs';
@@ -15,6 +15,7 @@ export class QuestionServiceService {
   getQuestionsurl="/api/question/get-questions";
   modifierQuestionUrl="/api/question/update-question";
   deleteQuestionUrl="/api/question/delete-question";
+  getquestionbycontenueurl="/api/question/get-questions-by-contenue";
   ////////////////////////////////////////////////////////////////
   voteurl="/api/vote/add-delete-vote";
   nbrvoteurl="/api/vote/nbr-vote";
@@ -34,6 +35,10 @@ export class QuestionServiceService {
   getQuestionbyId(id:String): Observable<Question>{
     return this.http.get<Question>(`${this.getquestionbyIdsurl}/${id}`);
 
+  }
+  getQuestionsByContent(content: string): Observable<Question[]> {
+    const params = new HttpParams().set('contenue', content);
+    return this.http.get<Question[]>(`${this.getquestionbycontenueurl}`, { params: params });
   }
   updateQuestion(id:String, q:Question):Observable<Question>{
     return this.http.put<Question>(`${this.modifierQuestionUrl}/${id}`,q);

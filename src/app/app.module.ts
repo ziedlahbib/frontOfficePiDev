@@ -11,11 +11,13 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { QuestiondetailComponent } from './pages/questiondetail/questiondetail.component';
+import { RechercheComponent } from './pages/recherche/recherche.component';
 @NgModule({
   declarations: [
     AppComponent,
     ForumComponent,
-    QuestiondetailComponent
+    QuestiondetailComponent,
+    RechercheComponent
   ],
   imports: [
     BrowserModule,
