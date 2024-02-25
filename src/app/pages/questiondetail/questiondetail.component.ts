@@ -205,7 +205,6 @@ ajouterreponse(post: String) {
             }
           )
         }
-      this.getQuestion(this.ar.snapshot.params['id'])
     }
 
   );
@@ -214,7 +213,15 @@ modifierre(rep: Reponse, index: number) {
   const formGroup = this.formGroups[index];
   this.ps.updateReponse(rep.id, formGroup.value).subscribe(
     data => {
-      this.getQuestion(rep.id);
+      if(this.filesid!=null){
+        console.log(this.filesid)
+        this.ps.affecterfileaureponse(data.id,this.filesid,data).subscribe(
+          res=>{
+            this.filesid=[];
+            this.getQuestion(this.ar.snapshot.params['id']);
+          }
+        )
+      }
     }
   )
 }
