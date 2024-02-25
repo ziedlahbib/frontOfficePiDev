@@ -23,7 +23,6 @@ export class ForumComponent {
   currentUser = "65d75a23d70ef60c54dad107";
   isReady: boolean = false;
   questform!: FormGroup;
-  questformmodif!:FormGroup;
   hide: boolean = true;
   repform!: FormGroup;
   listofrep: Reponse[] = [];
@@ -71,8 +70,10 @@ export class ForumComponent {
       this.isReady = true;
   
       for (let question of data) {
-        this.initFormquestmodif(question);
-        console.log(this.questformmodif.value)
+
+        const formGroup = this.initFormquestmodif(question);
+              this.questformmodif.push(formGroup);
+              this.showmodifquest.push(false);
         if (question.reponses != null) {
           for (let reponse of question.reponses) {
             if (reponse != null) {
@@ -108,25 +109,20 @@ export class ForumComponent {
     );
 
   }
-
+  questformmodif: FormGroup[] = [];
   
   initFormquestmodif(data:Question) {
-    this.questformmodif = this.formBuilder.group({
-      contenue: [data?.contenue, Validators.required],
-      tech: [[], Validators.required],
-
+    return this.formBuilder.group({
+      contenue: [data?.contenue, Validators.required]
     });
-
-    this.questformmodif.valueChanges.subscribe(
-      data => { console.log(this.questformmodif.value) }
-    )
   }
   techControl = new FormControl();
 
   // Method to set selected technologies based on the item's tech array
 
-modifier(item:Question){
-  this.ps.updateQuestion(item.id,this.questformmodif.value).subscribe(
+modifier(item:Question, index: number){
+  const formGroup = this.formGroups[index];
+  this.ps.updateQuestion(item.id,formGroup.value).subscribe(
     data=>{
       this.getallQuestion();
     }
@@ -224,10 +220,10 @@ modifier(item:Question){
     console.log(this.showParagraph[index])
     this.showParagraph[index] = !this.showParagraph[index];
 }
-  showmodifquest:boolean=false;
-  toggleContentquest() {
+  showmodifquest:boolean[] = [];
+  toggleContentquest(index:number) {
     console.log(this.showParagraph)
-    this.showmodifquest = !this.showmodifquest;
+    this.showmodifquest[index] = !this.showmodifquest[index];
 }
 //////////////////////////////file
 selectedFiles!: FileList ;
