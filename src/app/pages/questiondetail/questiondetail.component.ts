@@ -209,7 +209,8 @@ ajouterreponse(post: String) {
             res=>{
               this.ps.getFilesbyreponse(data.id).subscribe(
                 resd=>{
-                    this.files=resd;
+                  this.files=[];
+                  console.log(this.files);
                 }
               )
             }

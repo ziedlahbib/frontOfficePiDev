@@ -69,6 +69,40 @@ body {
 .custom-file-upload:hover {
     background-color: #ADD8E6;
 }
+.file-wrapper {
+  display: inline-block;
+  background-color: #f0f0f0; /* Background color of the rectangle */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 10px; /* Rounded corners */
+  padding: 5px 10px; /* Padding inside the rectangle */
+}
+
+.file-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333; /* Text color */
+}
+
+.file-link:hover {
+  color: #007bff; /* Text color on hover */
+}
+
+.file-link i {
+  margin-left: auto; /* Push the icon to the right */
+  cursor: pointer;
+}
+
+/* Style for the close icon */
+.fa-times {
+  color: #999; /* Icon color */
+  margin-left: 10px; /* Spacing between text and icon */
+}
+
+.fa-times:hover {
+  color: #ff0000; /* Icon color on hover */
+}
+
 
 
 #fileInput {
