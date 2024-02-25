@@ -16,7 +16,6 @@ export class QuestiondetailComponent {
   role="ss";
   isReady: boolean = false;
   questform!: FormGroup;
-  questformmodif!:FormGroup;
   formGroups: FormGroup[] = [];
   repform!: FormGroup;
   tech = Technologie
@@ -81,9 +80,10 @@ toggleContentquest() {
   this.initquestform(this.question);
 }
 modifier(item:Question){
-  this.ps.updateQuestion(item.id,this.questformmodif.value).subscribe(
+  this.ps.updateQuestion(item.id,this.questform.value).subscribe(
     data=>{
       this.getQuestion(item.id);
+      this.showmodifquest=false;
     }
   )
 }
