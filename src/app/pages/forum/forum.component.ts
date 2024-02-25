@@ -10,6 +10,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Technologie } from '../../model/technologie';
+import { Observable, forkJoin } from 'rxjs';
+import { FileDB } from 'src/app/model/file-db.model';
 
 
 @Component({
@@ -95,7 +97,12 @@ export class ForumComponent {
     console.log(this.repform.value);
     this.ps.addreponse(post, this.currentUser, this.repform.value).subscribe(
       data => {
-        this.getallQuestion();
+        this.ps.affecterfileaureponse(data.id,this.filesid,data).subscribe(
+          res=>{
+            this.getallQuestion();
+          }
+        )
+        
       }
 
     );
@@ -221,6 +228,73 @@ modifier(item:Question){
   toggleContentquest() {
     console.log(this.showParagraph)
     this.showmodifquest = !this.showmodifquest;
+}
+//////////////////////////////file
+selectedFiles!: FileList ;
+fileInfos!: Observable<any>;
+file!: FileDB;
+files!:FileDB[];
+filesid!:String[];
+selectFile(event:any) {
+  this.selectedFiles = event.target.files;
+}
+upload(): void {
+  if (!this.selectedFiles) {
+    console.error("No files selected.");
+    return;
+  }
+
+  const uploadObservables: Observable<any>[] = [];
+
+  for (let i = 0; i < this.selectedFiles.length; i++) {
+    const currentFile = this.selectedFiles.item(i);
+    if (!currentFile) {
+      console.error("File is null or undefined.");
+      continue;
+    }
+    console.log(currentFile);
+    
+    uploadObservables.push(this.ps.upload(currentFile));
+  }
+
+  forkJoin(uploadObservables).subscribe(
+    uploadResponses => {
+      const getFileDetailsObservables: Observable<any>[] = [];
+      
+      for (const uploadResponse of uploadResponses) {
+        getFileDetailsObservables.push(this.ps.getFilesdetail(uploadResponse));
+      }
+
+      forkJoin(getFileDetailsObservables).subscribe(
+        fileDetails => {
+          console.log("Uploaded file details:", fileDetails);
+          for (const fileDetail of fileDetails) {
+            this.files.push(fileDetail);
+            this.filesid.push(fileDetail.id)
+          }
+
+          // Process the uploaded file details as needed
+        },
+        error => {
+          console.error("Error getting file details:", error);
+        }
+      );
+    },
+    error => {
+      console.error("Error uploading file:", error);
+    }
+  );
+}
+supprimerfile(idr:String,file:FileDB){
+  this.ps.deletefile(file.id).subscribe(
+    data=>{
+      this.ps.getFilesbyreponse(idr).subscribe(
+        res=>{
+          this.files=res;
+        }
+      )
+    }
+  )
 }
 
 }

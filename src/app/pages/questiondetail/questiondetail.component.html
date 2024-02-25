@@ -60,3 +60,41 @@
         </div>
       </div>
   </div>
+       <!-- Additional comments can be added here -->
+      <div class="comment" *ngFor="let cmt of question?.reponses; let i = index">
+        <div class="container">
+          <p>{{ cmt.contenue }}</p>
+          <a class="clickable" *ngFor="let f of cmt?.files"  href="http://localhost:8090/pi/File/file/{{f.id}}"> {{f.name}}</a>
+          <p class="author">Comment by: {{ cmt?.user?.firstName }}</p>
+          <div  *ngIf="showParagraph[i]">
+            <form [formGroup]="formGroups[i]"   >
+              <textarea rows="5" cols="50"  formControlName="contenue"></textarea>
+              <div class="custom-button-container">
+                <button *ngIf="currentUser == cmt.user.id" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">retour</button>
+                <button *ngIf="currentUser == cmt.user.id " type="button" class="btn btn-primary btn-sm" (click)="modifierre(cmt,i); toggleContent(i)">save</button>
+                
+              </div>
+            </form>
+           
+          </div>
+        </div >
+        <div class="custom-button-container">
+          <button *ngIf="currentUser==cmt.user.id&&!showParagraph[i]" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">modifier</button>       
+          <button *ngIf="currentUser==cmt.user.id"type="button"  class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
+        </div>
+        
+      </div> 
+      <form [formGroup]="repform">
+        <div class="form-group"  >
+          <label for="comment">Comment:</label>
+          <textarea class="form-control" rows="5" id="comment" formControlName="contenue"></textarea>
+        </div>
+        <div class="custom-button-container">
+          <button type="button" class="btn btn-primary btn-sm"(click)="ajouterreponse(question.id)" >repondre</button>
+          <input type="file" id="fileInput" multiple (change)="selectFile($event);upload()">
+          <label for="fileInput" class="custom-file-upload">
+              <i class="fas fa-cloud-upload-alt"></i> choisir Files
+          </label>
+          
+        </div>
+      </form>

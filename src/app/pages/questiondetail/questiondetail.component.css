@@ -53,4 +53,24 @@ body {
   .custom-button-container {
     text-align: right;
   }
-  
+  .custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 8px; /* Adjust the font size */
+    font-weight: bold;
+    color: #fff;
+    background-color: #5cafcb;
+    border: none;
+    padding: 4px 8px; /* Adjust the padding */
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.custom-file-upload:hover {
+    background-color: #ADD8E6;
+}
+
+
+#fileInput {
+    display: none;
+}
