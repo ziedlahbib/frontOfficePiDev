@@ -30,6 +30,7 @@ constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder
     this.initForm();
 this.getQuestion(this.ar.snapshot.params['id']);
 this.initquestform(this.ar.snapshot.params['id']);
+
     
   }
   //////////////////////////Question////////////////////////
@@ -39,6 +40,20 @@ getQuestion(id:String){
       console.log(data)
       this.question=data;
       this.isReady=true;
+      if (data.reponses != null) {
+        for (let reponse of data.reponses) {
+          if (reponse != null) {
+            console.log(reponse);
+            const formGroup = this.initFormmodif(reponse);
+            this.formGroups.push(formGroup);
+            this.formGroups = data.reponses.map(reponse => this.initFormmodif(reponse));
+            this.showParagraph.push(false);
+            this.showform=true
+
+          }
+        }
+      }
+      
 
     }
   )
@@ -165,11 +180,13 @@ supprimerfile(idr:String,file:FileDB){
 formGroups: FormGroup[] = [];
 showParagraph: boolean[] = [];
 repform!: FormGroup;
+showform:boolean=false;
 toggleContent(index:number) {
   console.log(index)
   console.log(this.showParagraph[index])
   this.showParagraph[index] = !this.showParagraph[index];
-  //this.initFormmodif()
+  this.getQuestion(this.ar.snapshot.params['id']);
+
 }
 initForm() {
   this.repform = this.formBuilder.group({
