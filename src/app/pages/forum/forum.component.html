@@ -25,9 +25,8 @@
                   <mat-option *ngFor="let c of tech | keyvalue" [value]="c.key">{{ c.value }}</mat-option>
               </mat-select>
             </mat-form-field>
-            <!-- <app-autocomplete ngSkipHydration (technologySelected)="onTechnologySelected($event)"></app-autocomplete> -->
           </div>
-          <div class="col-6 text-right"> 
+          <div class="custom-button-container"> 
             <button type="button" class="btn btn-primary btn-sm" (click)="addquestion()" >Poser Questopn</button>
           </div>
         </div>
@@ -37,7 +36,7 @@
         
 <div class="container">
   
-  <div *ngFor="let item of listofQuestion;let idx = index"  class="post">
+  <div *ngFor="let item of listofQuestion;let idx = index"  class="post clickable" [routerLink]="['/detail-question',item.id]">
     <h1>Question:</h1>
     <p>{{item.contenue}}</p>
 
@@ -45,42 +44,55 @@
       <a style="color: blue;font-weight: bold;" href="#">#{{h.technologie}}</a>
     </div>
 
-      <p class="author">Posted by:{{ item?.user?.nom}}</p>
+      <p class="author">Posted by:{{ item?.user?.firstName}}</p>
 
     <span class="material-symbols-outlined clickable" (click)="addlike(item)">
       shift_lock
       </span>
-      <a>{{nbrlike[idx]}}</a>
-    <!-- <div class="comments" *ngFor="let cmt of item.reponses ;">
-      <div class="comment">
-        <div class="container">
-          <p >{{cmt.contenue}}</p>
-          <p class="author">Comment by: {{cmt?.user?.nom}}</p>
-          <div *ngFor="let formGroup of formGroups; let i = index">
-            <div  *ngIf="!showParagraph">
-              <form [formGroup]="formGroup">
-                <textarea rows="5" cols="50" formControlName="contenue">{{ formGroup?.get('contenue')?.value }}</textarea>
-                <div class="col-6 text-right">
-                  <button *ngIf="currentUser == cmt.user.id" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent()">retour</button>
-                  <button *ngIf="currentUser == cmt.user.id" type="button" class="btn btn-primary btn-sm" (click)="modifierre(cmt); toggleContent()">save</button>
-                </div>
-              </form>
-            </div>
-          </div>         
-        </div>
-        <button *ngIf="currentUser==cmt.user.id&&showParagraph" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent()">modifier</button>       
-        <button *ngIf="currentUser==cmt.user.id"type="button"  class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
+      <a style="color:#888">{{nbrlike[idx]}}</a>
+      <a style="margin: 10px;color: #ADD8E6;">Réponses:</a>
+      <a style="color:#888"*ngIf="item?.reponses?.length==null">0</a>
+      <a style="color:#888">{{item?.reponses?.length}}</a>
+      <div class="custom-button-container">
+        <button type="button" *ngIf="currentUser == item?.user?.id"
+        style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContentquest()"  >modifier</button>
+       <button type="button" *ngIf="currentUser == item?.user?.id" 
+       class="btn btn-primary btn-sm" (click)="supprimer(item)" >supprimer</button>
       </div>
-    </div> -->
+      <!-- modifie quest -->
+      <div class="container" *ngIf="showmodifquest">
+        <div class="post">
+          <form [formGroup]="questformmodif">
+            <div>
+              <div class="form-group"  >
+                <label for="comment">Question:</label>
+                <textarea class="form-control" rows="5" id="comment" formControlName="contenue" ></textarea>
+                <mat-form-field>
+                  <mat-label>Toppings</mat-label>
+                  <mat-select multiple formControlName="tech" >
+                      <mat-option *ngFor="let c of tech | keyvalue" [value]="c.key">{{ c.value }}</mat-option>
+                      <!-- <mat-option *ngFor="let a of item?.tech | keyvalue" [value]="a.key" selected>{{ a.value }}</mat-option> -->
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="custom-button-container"> 
+                <button type="button" class="btn btn-primary btn-sm" style="margin: 15px;" (click)="modifier(item);" >save</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="toggleContentquest()" >annuler</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- end modifier quest -->
       <!-- Additional comments can be added here -->
-      <div class="comment" *ngFor="let cmt of item?.reponses; let i = index">
+      <!-- <div class="comment" *ngFor="let cmt of item?.reponses; let i = index">
         <div class="container">
           <p>{{ cmt.contenue }}</p>
-          <p class="author">Comment by: {{ cmt.user?.nom }}</p>
+          <p class="author">Comment by: {{ cmt?.user?.firstName }}</p>
           <div  *ngIf="showParagraph[i]">
             <form [formGroup]="formGroups[i]"   >
               <textarea rows="5" cols="50"  formControlName="contenue"></textarea>
-              <div class="col-6 text-right">
+              <div class="custom-button-container">
                 <button *ngIf="currentUser == cmt.user.id" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">retour</button>
                 <button *ngIf="currentUser == cmt.user.id " type="button" class="btn btn-primary btn-sm" (click)="modifierre(cmt,i); toggleContent(i)">save</button>
                 
@@ -88,20 +100,22 @@
             </form>
            
           </div>
+        </div >
+        <div class="custom-button-container">
+          <button *ngIf="currentUser==cmt.user.id&&!showParagraph[i]" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">modifier</button>       
+          <button *ngIf="currentUser==cmt.user.id"type="button"  class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
         </div>
-        <button *ngIf="currentUser==cmt.user.id&&!showParagraph[i]" style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContent(i)">modifier</button>       
-        <button *ngIf="currentUser==cmt.user.id"type="button"  class="btn btn-primary btn-sm"(click)="delete(cmt)" >effacer</button>
-      </div>
-      
-<!--  -->
+        
+      </div> 
       <form [formGroup]="repform">
         <div class="form-group"  >
           <label for="comment">Comment:</label>
           <textarea class="form-control" rows="5" id="comment" formControlName="contenue"></textarea>
         </div>
-        <div class="col-6 text-right"> <!-- This column takes up half of the container's width and aligns its content to the left -->
+        <div class="custom-button-container">
           <button type="button" class="btn btn-primary btn-sm"(click)="ajouterreponse(item.id)" >repondre</button>
         </div>
       </form>
+    -->
   </div>
 

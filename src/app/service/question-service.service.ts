@@ -10,19 +10,19 @@ import { Reponse } from '../model/reponse';
 })
 export class QuestionServiceService {
 
-  addquestionUrl="http://localhost:8090/pi/question/add-question";
-  getquestionbyIdsurl="http://localhost:8090/pi/question/get-question";
-  getQuestionsurl="http://localhost:8090/pi/question/get-questions";
-  modifierQuestionUrl="http://localhost:8090/pi/question/update-question";
-  deleteQuestionUrl="http://localhost:8090/pi/question/delete-question";
+  addquestionUrl="/api/question/add-question";
+  getquestionbyIdsurl="/api/question/get-questionbyid";
+  getQuestionsurl="/api/question/get-questions";
+  modifierQuestionUrl="/api/question/update-question";
+  deleteQuestionUrl="/api/question/delete-question";
   ////////////////////////////////////////////////////////////////
-  voteurl="http://localhost:8090/pi/vote/add-delete-vote";
-  nbrvoteurl="http://localhost:8090/pi/vote/nbr-vote";
+  voteurl="/api/vote/add-delete-vote";
+  nbrvoteurl="/api/vote/nbr-vote";
   ///////////////////////////////////////////////////
-  addreponseurl="http://localhost:8090/pi/reponse/add-Reponse";
-  getrepbyquestionsurl="http://localhost:8090/pi/reponse/getallcmtbypost";
-  deleteReponseUrl="http://localhost:8090/pi/reponse/delete-Reponse";
-  modifierReponseUrl="http://localhost:8090/pi/reponse/update-Reponse";
+  addreponseurl="/api/reponse/add-Reponse";
+  getrepbyquestionsurl="/api/reponse/getallcmtbypost";
+  deleteReponseUrl="/api/reponse/delete-Reponse";
+  modifierReponseUrl="/api/reponse/update-Reponse";
   constructor(private http : HttpClient) { }
   ajoutQuestion(q :Question,idu:String): Observable<Question>{
     return this.http.post<Question>(`${this.addquestionUrl}/${idu}`,q);
@@ -38,7 +38,7 @@ export class QuestionServiceService {
   updateQuestion(id:String, q:Question):Observable<Question>{
     return this.http.put<Question>(`${this.modifierQuestionUrl}/${id}`,q);
   }
-  deletePost(id:String): any{
+  deletePost(id:String): Observable<any>{
     return this.http.delete(`${this.deleteQuestionUrl}/${id}`);
   }
   ////////////////////////////////////////////

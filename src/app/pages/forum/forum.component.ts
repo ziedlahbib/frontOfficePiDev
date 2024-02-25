@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Reponse } from '../../model/reponse';
 import { Question } from '../../model/question';
 import { QuestionServiceService } from '../../service/question-service.service';
@@ -18,9 +18,10 @@ import { Technologie } from '../../model/technologie';
   styleUrls: ['./forum.component.css']
 })
 export class ForumComponent {
-  currentUser!: String;
+  currentUser = "65d75a23d70ef60c54dad107";
   isReady: boolean = false;
   questform!: FormGroup;
+  questformmodif!:FormGroup;
   hide: boolean = true;
   repform!: FormGroup;
   listofrep: Reponse[] = [];
@@ -29,18 +30,18 @@ export class ForumComponent {
   tech = Technologie
   nbrlike: Number[] = []
   formGroups: FormGroup[] = [];
+  
   constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router) { }
 
-  ngOnInit(): void {
-    this.currentUser = "65d621813ece05768b528f25";
-
+  ngOnInit(): void { 
     this.initForm();
     this.getallQuestion();
     this.initFormquest();
-
+    
   }
+ 
   addquestion() {
-    this.ps.ajoutQuestion(this.questform.value, this.currentUser).subscribe(
+    this.ps.ajoutQuestion(this.questform.value,this.currentUser).subscribe(
       res => {
         console.log(res)
         this.getallQuestion()
@@ -63,10 +64,13 @@ export class ForumComponent {
   getallQuestion() {
     this.ps.getQuestions().subscribe(data => {
       console.log(data);
+      
       this.listofQuestion = data;
       this.isReady = true;
   
       for (let question of data) {
+        this.initFormquestmodif(question);
+        console.log(this.questformmodif.value)
         if (question.reponses != null) {
           for (let reponse of question.reponses) {
             if (reponse != null) {
@@ -96,6 +100,37 @@ export class ForumComponent {
 
     );
 
+  }
+
+  
+  initFormquestmodif(data:Question) {
+    this.questformmodif = this.formBuilder.group({
+      contenue: [data?.contenue, Validators.required],
+      tech: [[], Validators.required],
+
+    });
+
+    this.questformmodif.valueChanges.subscribe(
+      data => { console.log(this.questformmodif.value) }
+    )
+  }
+  techControl = new FormControl();
+
+  // Method to set selected technologies based on the item's tech array
+
+modifier(item:Question){
+  this.ps.updateQuestion(item.id,this.questformmodif.value).subscribe(
+    data=>{
+      this.getallQuestion();
+    }
+  )
+}
+  supprimer(item:Question){
+    this.ps.deletePost(item.id).subscribe(
+      data=>{
+        this.getallQuestion();
+      }
+    )
   }
   getcmtbypos(post: any) {
     this.ps.getreponsebyquestion(post).subscribe(
@@ -181,5 +216,10 @@ export class ForumComponent {
     console.log(index)
     console.log(this.showParagraph[index])
     this.showParagraph[index] = !this.showParagraph[index];
+}
+  showmodifquest:boolean=false;
+  toggleContentquest() {
+    console.log(this.showParagraph)
+    this.showmodifquest = !this.showmodifquest;
 }
 }
