@@ -24,6 +24,7 @@ export class QuestiondetailComponent {
   repo: Reponse[] = [];
   nbrlike!: Number;
   question!:Question;
+  isReadyf:boolean=false;
 constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router,
   private ar:ActivatedRoute){}
   ngOnInit(): void { 
@@ -37,7 +38,8 @@ getQuestion(id:String){
     data=>{
       console.log(data)
       this.question=data;
-      this.initquestform(data);
+      this.isReady=true;
+
     }
   )
 }
@@ -75,5 +77,14 @@ supprimer(item:Question){
 showmodifquest:boolean=false;
 toggleContentquest() {
   this.showmodifquest = !this.showmodifquest;
+  this.isReadyf=true;
+  this.initquestform(this.question);
+}
+modifier(item:Question){
+  this.ps.updateQuestion(item.id,this.questformmodif.value).subscribe(
+    data=>{
+      this.getQuestion(item.id);
+    }
+  )
 }
 }

@@ -12,25 +12,51 @@
     color: #ADD8E6;
   }
   </style>
-<h1>Question:</h1>
-<p>{{question?.contenue}}</p>
-
-<div *ngFor="let h of question?.hashtag">
-  <a style="color: blue;font-weight: bold;" href="#">#{{h?.technologie}}</a>
-</div>
-
-  <p class="author">Posted by:{{ question?.user?.firstName}}</p>
-
-<span class="material-symbols-outlined clickable" (click)="addlike(question)">
-  shift_lock
-  </span>
-  <a style="color:#888">{{nbrlike}}</a>
-  <a style="margin: 10px;color: #ADD8E6;">Réponses:</a>
-  <a style="color:#888"*ngIf="question?.reponses?.length==null">0</a>
-  <a style="color:#888">{{question?.reponses?.length}}</a>
-  <div class="custom-button-container" *ngIf="currentUser == question?.user?.id&& role=='admin'">
-    <button type="button" 
-    style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContentquest()"  >modifier</button>
-   <button type="button" *ngIf="currentUser == question?.user?.id" 
-   class="btn btn-primary btn-sm" (click)="supprimer(question)" >supprimer</button>
+  <div *ngIf="isReady;">
+    <h1>Question:</h1>
+    <p>{{question?.contenue}}</p>
+    
+    <div *ngFor="let h of question?.hashtag">
+      <a style="color: blue;font-weight: bold;" href="#">#{{h?.technologie}}</a>
+    </div>
+    
+      <p class="author">Posted by:{{ question?.user?.firstName}}</p>
+    
+    <span class="material-symbols-outlined clickable" (click)="addlike(question)">
+      shift_lock
+      </span>
+      <a *ngIf="nbrlike==null" style="color:#888">0</a>
+      <a *ngIf="nbrlike!=null" style="color:#888">{{nbrlike}}</a>
+      <a style="margin: 10px;color: #ADD8E6;">Réponses:</a>
+      <a style="color:#888"*ngIf="question?.reponses?.length==null">0</a>
+      <a style="color:#888">{{question?.reponses?.length}}</a>
+      <div class="custom-button-container" *ngIf="currentUser == question?.user?.id|| role=='admin'">
+        <button type="button" 
+        style="margin: 15px;" class="btn btn-primary btn-sm" (click)="toggleContentquest()"  >modifier</button>
+       <button type="button" *ngIf="currentUser == question?.user?.id" 
+       class="btn btn-primary btn-sm" (click)="supprimer(question)" >supprimer</button>
+      </div>
+      <div class="container" *ngIf="showmodifquest&&isReadyf">
+        <div class="post">
+          <form [formGroup]="questform">
+            <div>
+              <div class="form-group"  >
+                <label for="comment">Question:</label>
+                <textarea class="form-control" rows="5" id="comment" formControlName="contenue" ></textarea>
+                <mat-form-field>
+                  <mat-label>Toppings</mat-label>
+                  <mat-select multiple formControlName="tech" >
+                      <mat-option *ngFor="let c of tech | keyvalue" [value]="c.key">{{ c.value }}</mat-option>
+                      <!-- <mat-option *ngFor="let a of item?.tech | keyvalue" [value]="a.key" selected>{{ a.value }}</mat-option> -->
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="custom-button-container"> 
+                <button type="button" class="btn btn-primary btn-sm" style="margin: 15px;" (click)="modifier(question);" >save</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="toggleContentquest()" >annuler</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
   </div>
