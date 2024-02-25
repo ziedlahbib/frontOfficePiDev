@@ -7919,3 +7919,108 @@ footer.demo .copyright {
 }
 
 }
+/* styling search bar */
+.search input[type=text] {
+  width: 300px;
+  height: 25px;
+  border-radius: 25px;
+  border: none;
+}
+
+.search {
+  float: right;
+  margin: 7px;
+}
+
+.search button {
+  background-color: #0074D9;
+  color: #f2f2f2;
+  float: right;
+  padding: 5px 10px;
+  margin-right: 16px;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+/* styling logo and tag */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* styling navlist */
+#navlist {
+	background-color: #0074D9;
+	position: absolute;
+	width: 100%;
+}
+
+/* styling navlist anchor element */
+#navlist a {
+	float: left;
+	display: block;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 12px;
+	text-decoration: none;
+	font-size: 15px;
+}
+
+.navlist-right {
+	float: right;
+}
+
+/* hover effect of navlist anchor element */
+#navlist a:hover {
+	background-color: #ddd;
+	color: black;
+}
+
+/*search input */
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.search-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  cursor: pointer;
+}
+
+.search-button i {
+  margin-top: 3px;
+}
+
+/* If you're using Font Awesome for the search icon */
+.search-button i.fa {
+  font-size: 18px;
+}
+.navbar-container {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-collapse-container {
+  flex-grow: 1;
+}
+
+
