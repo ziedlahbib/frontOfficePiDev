@@ -299,7 +299,7 @@ getc() {
       console.log(data['filterValue']);
       this.contenue = data['filterValue'];
       if (!this.contenue) { // Check if filterValue is null or undefined
-        this.route.navigate(['/forum']);
+        this.getallQuestion();
       } else {
         this.gequestionbycontenue();
       }
