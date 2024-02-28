@@ -24,7 +24,6 @@ export class RechercheComponent {
     ngOnInit(): void {
 
       this.get();
-      this.gequestionbycontenue();
     }
     initFormquestmodif(data:Question) {
       this.questformmodif = this.formBuilder.group({
@@ -37,36 +36,33 @@ export class RechercheComponent {
         data => { console.log(this.questformmodif.value) }
       )
     }
-    get(){
+    get() {
       this.act.queryParams.subscribe(
-        data=>{
-          console.log(data)
-          this.contenue=data['filterValue'];
-          if(this.contenue==''){
-            this.router.navigate(['/forum'])
-          }else{
-            this.router.navigate(['/recherche']) 
+        data => {
+          console.log(data['filterValue']);
+          this.contenue = data['filterValue'];
+          if (!this.contenue) { // Check if filterValue is null or undefined
+            this.router.navigate(['/forum']);
+          } else {
+            this.gequestionbycontenue();
           }
-           
-  
         }
-      )
+      );
     }
-    gequestionbycontenue(){
+    
+    gequestionbycontenue() {
       this.qs.getQuestionsByContent(this.contenue).subscribe(
-        res=>{
-          this.questions=res;
-          console.log('contenue',this.contenue)
-          for (let question of res) {
+        res => {
+          this.questions = res;
+          console.log('contenue', this.contenue);
+          this.questions.forEach((question, index) => {
             this.initFormquestmodif(question);
-            console.log(this.questformmodif.value)  
-            let index = this.questions.indexOf(question);
             this.qs.getnbrvote(question.id).subscribe(res => {
               this.nbrlike[index] = res;
             });
-          }
+          });
         }
-      )
+      );
     }
     addlike(post: Question) {
       this.qs.vote(post.id, this.currentUser, post).subscribe(

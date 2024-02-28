@@ -13,11 +13,13 @@ export class AppComponent {
 ) {
 
 }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue)
-    this.router.navigate(['recherche'], { queryParams: { filterValue: filterValue }});
-    
-    
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  console.log(filterValue);
+  if (filterValue.trim() === '') {
+    this.router.navigate(['/forum']);
+  } else {
+    this.router.navigate(['/recherche'], { queryParams: { filterValue: filterValue.trim() } });
+  }
 }
 }

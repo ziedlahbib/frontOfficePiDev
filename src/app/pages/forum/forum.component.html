@@ -26,6 +26,7 @@
               </mat-select>
             </mat-form-field>
           </div>
+
           <div class="custom-button-container"> 
             <button type="button" class="btn btn-primary btn-sm" (click)="addquestion()" >Poser Questopn</button>
           </div>
@@ -35,10 +36,10 @@
   </div>
         
 <div class="container">
-  
+  <hr>
   <div *ngFor="let item of listofQuestion;let idx = index"  >
     <h1>Question:</h1>
-    <p class="post clickable" [routerLink]="['/detail-question',item.id]">{{item.contenue}}</p>
+    <p class=" clickable" [routerLink]="['/detail-question',item.id]">{{item.contenue}}</p>
 
     <div *ngFor="let h of item.hashtag">
       <a style="color: blue;font-weight: bold;" href="#">#{{h.technologie}}</a>
@@ -59,6 +60,8 @@
        <button type="button" *ngIf="currentUser == item?.user?.id" 
        class="btn btn-primary btn-sm" (click)="supprimer(item)" >supprimer</button>
       </div>
+      <hr>
+      
       <!-- modifie quest -->
       <div class="container" *ngIf="showmodifquest[idx]">
         <div class="post">
