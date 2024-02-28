@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, 
 import { Reponse } from '../../model/reponse';
 import { Question } from '../../model/question';
 import { QuestionServiceService } from '../../service/question-service.service';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Vote } from '../../model/vote';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -31,14 +31,15 @@ export class ForumComponent {
   tech = Technologie
   nbrlike: Number[] = []
   formGroups: FormGroup[] = [];
-  
-  constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router) { }
+  contenue!:string;
+  questions!:Question[];
+  constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router,private act: ActivatedRoute) { }
 
   ngOnInit(): void { 
     this.initForm();
     this.getallQuestion();
     this.initFormquest();
-    
+    this.getc();
   }
  
   addquestion() {
@@ -292,5 +293,32 @@ supprimerfile(idr:String,file:FileDB){
     }
   )
 }
+getc() {
+  this.act.queryParams.subscribe(
+    data => {
+      console.log(data['filterValue']);
+      this.contenue = data['filterValue'];
+      if (!this.contenue) { // Check if filterValue is null or undefined
+        this.route.navigate(['/forum']);
+      } else {
+        this.gequestionbycontenue();
+      }
+    }
+  );
+}
 
+gequestionbycontenue() {
+  this.ps.getQuestionsByContent(this.contenue).subscribe(
+    res => {
+      this.listofQuestion = res;
+      console.log('contenue', this.contenue);
+      this.questions.forEach((question, index) => {
+        this.initFormquestmodif(question);
+        this.ps.getnbrvote(question.id).subscribe(res => {
+          this.nbrlike[index] = res;
+        });
+      });
+    }
+  );
+}
 }
