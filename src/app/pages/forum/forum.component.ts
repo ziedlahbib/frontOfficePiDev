@@ -37,7 +37,7 @@ export class ForumComponent {
   contenue!:string;
   questions!:Question[];
   start=0;
-  end=6;
+  end=4;
   constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router
     ,private toastrService: ToastrService,private act: ActivatedRoute) { 
       ;
@@ -338,6 +338,7 @@ gequestionbycontenue() {
   this.ps.getQuestionsByContent(this.contenue).subscribe(
     res => {
       this.listofQuestion = res;
+      this.listofQuestionpagination=this.listofQuestion;
       console.log('contenue', this.contenue);
       this.questions.forEach((question, index) => {
         this.initFormquestmodif(question);

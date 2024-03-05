@@ -124,7 +124,7 @@
     -->
   </div>
   <div class="col-12" *ngIf="listofQuestionpagination">
-    <mat-paginator [length]="listofQuestion.length" [pageSize]="6" [pageSizeOptions]="[6, 12, 18]"
+    <mat-paginator [length]="listofQuestion.length" [pageSize]="4" [pageSizeOptions]="[4,6, 12, 18]"
         (page)="paginate($event)">
     </mat-paginator>
 </div>
