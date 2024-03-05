@@ -12,15 +12,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { Technologie } from '../../model/technologie';
 import { Observable, forkJoin } from 'rxjs';
 import { FileDB } from 'src/app/model/file-db.model';
-
-
+import { ToastrService } from 'ngx-toastr';
+import {  OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-forum',
   templateUrl: './forum.component.html',
   styleUrls: ['./forum.component.css']
 })
 export class ForumComponent {
-  currentUser = "65d75a23d70ef60c54dad107";
+  currentUser = "testone";
   isReady: boolean = false;
   questform!: FormGroup;
   hide: boolean = true;
@@ -28,12 +30,18 @@ export class ForumComponent {
   listofrep: Reponse[] = [];
   repo: Reponse[] = [];
   listofQuestion: Question[] = [];
+  listofQuestionpagination: Question[] = [];
   tech = Technologie
   nbrlike: Number[] = []
   formGroups: FormGroup[] = [];
   contenue!:string;
   questions!:Question[];
-  constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router,private act: ActivatedRoute) { }
+  start=0;
+  end=6;
+  constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router
+    ,private toastrService: ToastrService,private act: ActivatedRoute) { 
+      ;
+    }
 
   ngOnInit(): void { 
     this.initForm();
@@ -45,6 +53,9 @@ export class ForumComponent {
   addquestion() {
     this.ps.ajoutQuestion(this.questform.value,this.currentUser).subscribe(
       res => {
+        console.log("av")
+        this.toastrService.success("Question ajouté avec succés")
+        console.log("ap")
         console.log(res)
         this.getallQuestion()
       }
@@ -62,14 +73,23 @@ export class ForumComponent {
     )
   }
 
-
+  paginate(event:PageEvent) {
+    let startIndex = event.pageSize * event.pageIndex;
+    this.start = startIndex;
+    let endIndex = startIndex + event.pageSize;
+    this.end = endIndex;
+    if (endIndex > this.listofQuestion.length) {
+      endIndex = this.listofQuestion.length;
+    }
+    this.listofQuestionpagination = this.listofQuestion.slice(startIndex, endIndex);
+  }
   getallQuestion() {
     this.ps.getQuestions().subscribe(data => {
       console.log(data);
       
       this.listofQuestion = data;
+      this.listofQuestionpagination=this.listofQuestion.slice(this.start, this.end);
       this.isReady = true;
-  
       for (let question of data) {
 
         const formGroup = this.initFormquestmodif(question);
@@ -101,6 +121,7 @@ export class ForumComponent {
       data => {
         this.ps.affecterfileaureponse(data.id,this.filesid,data).subscribe(
           res=>{
+            this.toastrService.success("Reponse ajouté avec succés")
             this.getallQuestion();
           }
         )
@@ -125,6 +146,7 @@ modifier(item:Question, index: number){
   const formGroup = this.formGroups[index];
   this.ps.updateQuestion(item.id,formGroup.value).subscribe(
     data=>{
+      this.toastrService.success("Question modifié avec succés")
       this.getallQuestion();
     }
   )
@@ -132,6 +154,7 @@ modifier(item:Question, index: number){
   supprimer(item:Question){
     this.ps.deletePost(item.id).subscribe(
       data=>{
+        this.toastrService.success("Question supprimé avec succés")
         this.getallQuestion();
       }
     )
@@ -173,6 +196,7 @@ modifier(item:Question, index: number){
   delete(cmt: Reponse) {
     this.ps.deletereponse(cmt.id).subscribe(
       res => {
+        this.toastrService.success("Reponse supprimé avec succés")
         this.getallQuestion();
       }
     )
@@ -182,6 +206,7 @@ modifier(item:Question, index: number){
     const formGroup = this.formGroups[index];
     this.ps.updateReponse(rep.id, formGroup.value).subscribe(
       data => {
+        this.toastrService.success("Reponse modifié avec succés")
         this.getallQuestion();
       }
     )
@@ -265,6 +290,7 @@ upload(): void {
       forkJoin(getFileDetailsObservables).subscribe(
         fileDetails => {
           console.log("Uploaded file details:", fileDetails);
+          this.toastrService.success("fichier chargé avec succés")
           for (const fileDetail of fileDetails) {
             this.files.push(fileDetail);
             this.filesid.push(fileDetail.id)
@@ -287,6 +313,7 @@ supprimerfile(idr:String,file:FileDB){
     data=>{
       this.ps.getFilesbyreponse(idr).subscribe(
         res=>{
+          this.toastrService.success("fichier supprimé avec succés")
           this.files=res;
         }
       )

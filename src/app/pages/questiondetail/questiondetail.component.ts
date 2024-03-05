@@ -7,14 +7,14 @@ import { Question } from 'src/app/model/question';
 import { Reponse } from 'src/app/model/reponse';
 import { Technologie } from 'src/app/model/technologie';
 import { QuestionServiceService } from 'src/app/service/question-service.service';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-questiondetail',
   templateUrl: './questiondetail.component.html',
   styleUrls: ['./questiondetail.component.css']
 })
 export class QuestiondetailComponent {
-  currentUser = "65d75a23d70ef60c54dad107";
+  currentUser = "testone";
   role="ss";
   isReady: boolean = false;
   questform!: FormGroup;
@@ -24,8 +24,9 @@ export class QuestiondetailComponent {
   nbrlike!: Number;
   question!:Question;
   isReadyf:boolean=false;
+  initialRating: number = 5
 constructor(private ps: QuestionServiceService, private formBuilder: FormBuilder, private route: Router,
-  private ar:ActivatedRoute){}
+  private ar:ActivatedRoute,private toastrService: ToastrService){}
   ngOnInit(): void { 
     this.initForm();
 this.getQuestion(this.ar.snapshot.params['id']);
@@ -86,7 +87,9 @@ addlike(post: Question) {
 supprimer(item:Question){
   this.ps.deletePost(item.id).subscribe(
     data=>{
+      this.toastrService.success("Question supprimé avec succés")
     }
+    
   )
 }
 showmodifquest:boolean=false;
@@ -98,6 +101,7 @@ toggleContentquest() {
 modifier(item:Question){
   this.ps.updateQuestion(item.id,this.questform.value).subscribe(
     data=>{
+      this.toastrService.success("Question modifier avec succés")
       this.getQuestion(item.id);
       this.showmodifquest=false;
     }
@@ -143,6 +147,7 @@ upload(): void {
 
       forkJoin(getFileDetailsObservables).subscribe(
         fileDetails => {
+          this.toastrService.success("fichier  ajouté avec succés")
           console.log("Uploaded file details:", fileDetails);
           for (const fileDetail of fileDetails) {
             this.files.push(fileDetail);
@@ -165,6 +170,7 @@ upload(): void {
 supprimerfile(idr:String,file:FileDB){
   this.ps.deletefile(file.id).subscribe(
     data=>{
+      this.toastrService.success("fichier supprimé avec succés")
         this.getQuestion(this.ar.snapshot.params['id']);
     }
   )
@@ -200,6 +206,7 @@ ajouterreponse(post: String) {
           console.log(this.filesid)
           this.ps.affecterfileaureponse(data.id,this.filesid,data).subscribe(
             res=>{
+              this.toastrService.success("Reponse ajouté avec succés")
               this.filesid=[];
               this.getQuestion(this.ar.snapshot.params['id']);
             }
@@ -217,6 +224,7 @@ modifierre(rep: Reponse, index: number) {
         console.log(this.filesid)
         this.ps.affecterfileaureponse(data.id,this.filesid,data).subscribe(
           res=>{
+            this.toastrService.success("Réponse modifié avec succés")
             this.filesid=[];
             this.getQuestion(this.ar.snapshot.params['id']);
           }
@@ -228,6 +236,7 @@ modifierre(rep: Reponse, index: number) {
 delete(cmt: Reponse) {
   this.ps.deletereponse(cmt.id).subscribe(
     res => {
+      this.toastrService.success("Réponse supprimé avec succés")
       this.getQuestion(this.ar.snapshot.params['id']);
 
     }

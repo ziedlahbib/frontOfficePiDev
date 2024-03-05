@@ -105,6 +105,14 @@
   </div>
 
 </div>
+<div class="card-footer py-4">
+  <nav aria-label="...">
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </nav>
+</div>
 <form [formGroup]="repform">
   <div class="form-group">
     <label for="comment">Comment:</label>

@@ -9,9 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { ForumComponent } from './pages/forum/forum.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { QuestiondetailComponent } from './pages/questiondetail/questiondetail.component';
 import { RechercheComponent } from './pages/recherche/recherche.component';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { ToastrModule, provideToastr } from 'ngx-toastr';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,9 +31,15 @@ import { RechercheComponent } from './pages/recherche/recherche.component';
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatPaginatorModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(),
+
   ],
-  providers: [],
+  providers: [    provideAnimations(), // required animations providers
+  provideToastr(), // Toastr providers
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
